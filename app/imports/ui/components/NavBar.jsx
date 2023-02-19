@@ -13,9 +13,8 @@ const NavBar = () => {
   const { currentUser } = useTracker(() => ({
     currentUser: Meteor.user() ? Meteor.user().username : '',
   }), []);
-  const menuStyle = { marginBottom: '10px' };
   return (
-    <Navbar bg="light" expand="lg" style={menuStyle}>
+    <Navbar bg="light" expand="lg">
       <Container>
         <Navbar.Brand id={COMPONENT_IDS.NAVBAR_LANDING_PAGE} as={NavLink} to="/"><h1>meteor-application-template-production</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls={COMPONENT_IDS.NAVBAR_COLLAPSE} />

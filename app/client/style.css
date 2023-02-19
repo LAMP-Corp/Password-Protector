@@ -26,3 +26,19 @@ body {
   padding-top: 10px;
   padding-bottom: 20px;
 }
+
+.purple-text {
+  color: #7a61bb;
+}
+
+.gray-text {
+  color: darkgray;
+}
+
+.off-white-background {
+  background-color: whitesmoke;
+}
+
+.light-orange-background {
+  background-color: #f5ae7d;
+}
