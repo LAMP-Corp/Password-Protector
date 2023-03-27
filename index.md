@@ -361,7 +361,7 @@ I20220713-10:34:10.909(-10)? --------------------------------
 
 #### Integration testing
 
-The [package.json](https://github.com/ics-software-engineering/meteor-application-template-production/blob/main/app/package.json) file has a script called `test-integration`. This script uses the `meteor test --full-app --once` command. This `meteor test` looks for files `*.app-test.js`. In `meteor-application-template-production we are testing the Meteor methods. For example, the [StuffCollection.methods.app-test.js](https://github.com/ics-software-engineering/meteor-application-template-production/blob/main/app/imports/api/stuff/SuffCollection.methods.app-test.js) tests the define, update, and removeIt methods. Here's an example run:
+The [package.json](https://github.com/ics-software-engineering/meteor-application-template-production/blob/main/app/package.json) file has a script called `test-integration`. This script uses the `meteor test --full-app --once` command. This `meteor test` looks for files `*.app-test.js`. In `meteor-application-template-production we are testing the Meteor methods. For example, the [PasswordCollection.methods.app-test.js](https://github.com/ics-software-engineering/meteor-application-template-production/blob/main/app/imports/api/stuff/SuffCollection.methods.app-test.js) tests the define, update, and removeIt methods. Here's an example run:
 
 ```shell
 % meteor npm run test-integration
