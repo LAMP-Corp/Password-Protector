@@ -46,22 +46,23 @@ const Landing = () => {
             {currentUser ? (<>{passwords && passwords.length > 0 ? 
                 (
                     <div className="d-flex justify-content-center">
-                        <table className="table table-hover" style={{ margin: "auto" }}>
+                        <table className="table table-hover" style={{ marginLeft: "10%", width:"40%"}}>
                             <thead>
                                 <tr>
                                     <th scope="col">Website</th>
-                                    <th scope="col">Owner</th>
-                                    <th scope="col">Password</th>
+                                    <th scope="col" style={{width: "300px"}}>Password</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {passwords.map((password) => (
                                     <tr key={password._id}>
                                         <td>{password.website}</td>
-                                        <td>{password.owner}</td>
                                         <td>
                                         {isPasswordShown(password._id) ? password.password : '*'.repeat(password.password.length)}
-                                        <input className="ml-2" type="checkbox" onClick={(event) => handleCheckbox(event, password._id)}/> Show Password
+                                        </td>
+                                        <td>    
+                                            <input className="ml-2" type="checkbox" onClick={(event) => handleCheckbox(event, password._id)}/> Show Password
                                         </td>
                                     </tr>
                                 ))}

@@ -137,6 +137,56 @@ class PasswordCollection extends BaseCollection {
   }
 }
 
+Meteor.methods({
+  'passwords.insert'(website, password) {
+    check(website, String);
+    check(password, String);
+
+    // Make sure the user is logged in before inserting a password
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    Passwords.insert({
+      website,
+      password,
+      owner: Meteor.user().username,
+      createdAt: new Date(),
+    });
+  },
+  'passwords.remove'(passwordId) {
+    check(passwordId, String);
+
+    // Make sure the user is logged in before removing a password
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const password = Passwords.findOne({_id: passwordId, owner: Meteor.user().username});
+    if (!password) {
+      throw new Meteor.Error('password-not-found', 'The password could not be found');
+    }
+
+    Passwords.remove(passwordId);
+  },
+  'passwords.update'(passwordId, updatedPassword) {
+    check(passwordId, String);
+    check(updatedPassword, String);
+
+    // Make sure the user is logged in before updating a password
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    const password = Passwords.findOne({_id: passwordId, owner: Meteor.user().username});
+    if (!password) {
+      throw new Meteor.Error('password-not-found', 'The password could not be found');
+    }
+
+    Passwords.update(passwordId, {$set: {password: updatedPassword}});
+  },
+});
+
 /**
  * Provides the singleton instance of this class to all other entities.
  */
