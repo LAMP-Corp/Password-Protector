@@ -8,6 +8,8 @@ import { PAGE_IDS } from '../utilities/PageIDs';
 import { Link } from "react-router-dom";
 import { Passwords } from "../../api/password/PasswordCollection";
 
+const CryptoJS = require('crypto-js');
+
 // Retrieve all passwords
 // const passwords = Passwords.find().fetch();
 // const owner = Meteor.user().username;
@@ -38,12 +40,21 @@ const Landing = () => {
             }
         });
     };
+
+      const decrypt = (password) => {
+        // decrypt the ciphertext using AES decryption
+        const bytes = CryptoJS.AES.decrypt(password.password, password.owner);
+        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        console.log("Landing Page", plaintext);
+        return plaintext;
+      }
+
       const isPasswordShown = (passwordId) => {
         return passwordIds.includes(passwordId);
     };
     return (
         <div className="off-white-background content">
-            {currentUser ? (<>{passwords && passwords.length > 0 ? 
+            {currentUser ? (<>{passwords && passwords.length > 0 ?
                 (
                     <div className="d-flex justify-content-center">
                         <table className="table table-hover" style={{ marginLeft: "10%", width:"40%"}}>
@@ -59,9 +70,9 @@ const Landing = () => {
                                     <tr key={password._id}>
                                         <td>{password.website}</td>
                                         <td>
-                                        {isPasswordShown(password._id) ? password.password : '*'.repeat(password.password.length)}
+                                        {isPasswordShown(password._id) ? decrypt(password) : '*'.repeat(password.password.length > 12 ? 12 : password.password.length )}
                                         </td>
-                                        <td>    
+                                        <td>
                                             <input className="ml-2" type="checkbox" onClick={(event) => handleCheckbox(event, password._id)}/> Show Password
                                         </td>
                                     </tr>

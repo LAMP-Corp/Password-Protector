@@ -9,6 +9,8 @@ import { Passwords } from "../../api/password/PasswordCollection";
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
+const CryptoJS = require('crypto-js');
+
 // Create a schema to specify the structure of the data to appear in the form.
 const formSchema = new SimpleSchema({
   website: String,
@@ -22,8 +24,18 @@ const AddPassword = () => {
   const [password, setPassword] = useState("password");
   // On submit, insert the data.
   const submit = (data, formRef) => {
-    const { website, password } = data;
+    const { website, password2 } = data;
     const owner = Meteor.user().username;
+
+
+    const password = CryptoJS.AES.encrypt(password2, owner).toString();
+    console.log(password);
+    // decrypt the ciphertext using AES decryption
+    const bytes = CryptoJS.AES.decrypt(password, owner);
+    const plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    console.log(plaintext);
+
+
     const collectionName = Passwords .getCollectionName();
     const definitionData = { website, password, owner };
     defineMethod.callPromise({ collectionName, definitionData })
@@ -33,7 +45,7 @@ const AddPassword = () => {
         formRef.reset();
       });
   };
-  
+
   const handleCheckbox = (event) => {
     const clicked = event.target.checked;
     if (!clicked) {
