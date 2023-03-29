@@ -28,15 +28,15 @@ const AddPassword = () => {
     const owner = Meteor.user().username;
 
 
-    const password = CryptoJS.AES.encrypt(password2, owner).toString();
+    var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+    var iv  = CryptoJS.enc.Utf8.parse('1583288699248111');
+
+    var encryptedCP = CryptoJS.AES.encrypt(password2, key, { iv: iv });
+    var password = encryptedCP.toString();
     console.log(password);
-    // decrypt the ciphertext using AES decryption
-    const bytes = CryptoJS.AES.decrypt(password, owner);
-    const plaintext = bytes.toString(CryptoJS.enc.Utf8);
-    console.log(plaintext);
 
 
-    const collectionName = Passwords .getCollectionName();
+    const collectionName = Passwords.getCollectionName();
     const definitionData = { website, password, owner };
     defineMethod.callPromise({ collectionName, definitionData })
       .catch(error => swal('Error', error.message, 'error'))

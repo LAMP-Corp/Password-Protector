@@ -42,11 +42,17 @@ const Landing = () => {
     };
 
       const decrypt = (password) => {
-        // decrypt the ciphertext using AES decryption
-        const bytes = CryptoJS.AES.decrypt(password.password, password.owner);
-        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
-        console.log("Landing Page", plaintext);
-        return plaintext;
+
+        var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+        var iv  = CryptoJS.enc.Utf8.parse('1583288699248111');
+
+        //Decode from text
+        var cipherParams = CryptoJS.lib.CipherParams.create({
+          ciphertext: CryptoJS.enc.Base64.parse(password.password )
+        });
+        var decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv});
+        console.log(decryptedFromText.toString(CryptoJS.enc.Utf8));
+        return decryptedFromText.toString(CryptoJS.enc.Utf8)
       }
 
       const isPasswordShown = (passwordId) => {
