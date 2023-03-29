@@ -24,6 +24,17 @@ const decrypt = (password) => {
   return decryptedFromText.toString(CryptoJS.enc.Utf8);
 }
 
+const encrypt = (unencryptedPassword) => {
+  const owner = Meteor.user().username;
+
+  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  var iv  = CryptoJS.enc.Utf8.parse(owner);
+
+  var encryptedCP = CryptoJS.AES.encrypt(unencryptedPassword, key, { iv: iv });
+  var password = encryptedCP.toString();
+  return password;
+}
+
 const EditPasswordModal = ({ password }) => {
   const _id = password._id;
   const {passwords, ready} = useTracker(() => {
@@ -40,8 +51,10 @@ const EditPasswordModal = ({ password }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const bridge = new SimpleSchema2Bridge(Passwords._schema);
+
   const submit = (data) => {
-    const { website, password } = data;
+    let { website, password } = data;
+    password = encrypt(password);
     const collectionName = Passwords.getCollectionName();
     const updateData = { id: _id, website, password };
     updateMethod.callPromise({ collectionName, updateData })
@@ -59,11 +72,11 @@ const EditPasswordModal = ({ password }) => {
           <Modal.Title>Edit Entry</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AutoForm schema={bridge} onSubmit={data => submit(data)} model={Passwords.findDoc(password._id)}>
+          <AutoForm schema={bridge} onSubmit={data => submit(data)} model={{ website: password.website, password: decrypt(password), owner: password.owner }}>
             <Card>
               <Card.Body>
                 <TextField name="website" />
-                <TextField name="password" value={decrypt(password)}/>
+                <TextField name="password" placeholder="hello" />
                 <SubmitField value="Update" />
                 <ErrorsField />
                 <HiddenField name="owner" />
