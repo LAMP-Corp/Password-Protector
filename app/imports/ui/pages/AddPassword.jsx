@@ -9,10 +9,12 @@ import { Passwords } from "../../api/password/PasswordCollection";
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
+const CryptoJS = require('crypto-js');
+
 // Create a schema to specify the structure of the data to appear in the form.
 const formSchema = new SimpleSchema({
   website: String,
-  password: String,
+  password2: String,
 });
 
 const bridge = new SimpleSchema2Bridge(formSchema);
@@ -22,9 +24,18 @@ const AddPassword = () => {
   const [password, setPassword] = useState("password");
   // On submit, insert the data.
   const submit = (data, formRef) => {
-    const { website, password } = data;
+    const { website, password2 } = data;
     const owner = Meteor.user().username;
-    const collectionName = Passwords .getCollectionName();
+
+
+    var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+    var iv  = CryptoJS.enc.Utf8.parse(owner);
+
+    var encryptedCP = CryptoJS.AES.encrypt(password2, key, { iv: iv });
+    var password = encryptedCP.toString();
+
+
+    const collectionName = Passwords.getCollectionName();
     const definitionData = { website, password, owner };
     defineMethod.callPromise({ collectionName, definitionData })
       .catch(error => swal('Error', error.message, 'error'))
@@ -33,7 +44,7 @@ const AddPassword = () => {
         formRef.reset();
       });
   };
-  
+
   const handleCheckbox = (event) => {
     const clicked = event.target.checked;
     if (!clicked) {
@@ -54,7 +65,7 @@ const AddPassword = () => {
             <Card>
               <Card.Body>
                 <AutoField name="website"/>
-                <AutoField name="password" type={password}/>
+                <AutoField name="password2" type={password}/>
                 <input className="mb-3" type="checkbox" onClick={handleCheckbox}/> Show Password
                 <SubmitField value="Submit" />
                 <ErrorsField />
