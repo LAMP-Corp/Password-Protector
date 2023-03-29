@@ -76,8 +76,8 @@ Create Home Page
     - Current: Navbar
     - Next: Dynamic Analysis
 - Kobey Arai
-    - New completions: Hashing Password
-    - Current: Hashing Password
+    - New completions: Encrypting Passwords
+    - Current: Encrypting Passwords
     - Next: Static Analysis
 - Yong-Sung Masuda
     - New completions: Edit Password Modal
