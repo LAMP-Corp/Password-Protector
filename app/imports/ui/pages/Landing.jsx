@@ -13,6 +13,7 @@ import { useParams } from 'react-router';
 import { Stuffs } from '../../api/stuff/StuffCollection';
 import { updateMethod } from '../../api/base/BaseCollection.methods';
 import EditPasswordModal from '../components/EditPasswordModal';
+import DeletePasswordModal from '../components/DeletePasswordModal';
 import swal from 'sweetalert';
 
 
@@ -78,6 +79,7 @@ const Landing = () => {
                                         </td>
                                         <td>
                                           <EditPasswordModal key={password._id} password={password}/>
+                                          <DeletePasswordModal password={password}/>
                                         </td>
                                     </tr>
                                 ))}
