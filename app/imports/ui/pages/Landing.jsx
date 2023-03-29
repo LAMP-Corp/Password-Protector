@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { ROLE } from '../../api/role/Role';
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Image, Row, Modal, Card } from "react-bootstrap";
 import { Google, Apple, Meta, Whatsapp, Instagram, Youtube, Android, Facebook, Justify } from "react-bootstrap-icons";
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Link } from "react-router-dom";
 import { Passwords } from "../../api/password/PasswordCollection";
+import { AutoForm, ErrorsField, HiddenField, NumField, SelectField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
+import { useParams } from 'react-router';
+import { Stuffs } from '../../api/stuff/StuffCollection';
+import { updateMethod } from '../../api/base/BaseCollection.methods';
+import EditPasswordModal from '../components/EditPasswordModal';
+import swal from 'sweetalert';
+
 
 // Retrieve all passwords
 // const passwords = Passwords.find().fetch();
@@ -21,11 +29,13 @@ const Landing = () => {
     const { currentUser } = useTracker(() => ({
         currentUser: Meteor.user() ? Meteor.user().username : '',
     }), []);
-    const {passwords} = useTracker(() => {
-        const subscription = Passwords.subscribePassword();
-        const passwordItems = Passwords.find({}, { sort: { password: 1, website: 1, owner: 1 } }).fetch();
-        return {
-            passwords: passwordItems
+  const {passwords, ready} = useTracker(() => {
+    const subscription = Passwords.subscribePassword();
+    const passwordItems = Passwords.find({}, { sort: { password: 1, website: 1, owner: 1 } }).fetch();
+    const rdy = subscription.ready();
+    return {
+            passwords: passwordItems,
+            ready: rdy
         };
       }, []);
       const handleCheckbox = (event, passwordId) => {
@@ -41,6 +51,7 @@ const Landing = () => {
       const isPasswordShown = (passwordId) => {
         return passwordIds.includes(passwordId);
     };
+
     return (
         <div className="off-white-background content">
             {currentUser ? (<>{passwords && passwords.length > 0 ? 
@@ -52,6 +63,7 @@ const Landing = () => {
                                     <th scope="col">Website</th>
                                     <th scope="col" style={{width: "300px"}}>Password</th>
                                     <th scope="col">Actions</th>
+                                    <th scope="col">Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,6 +75,9 @@ const Landing = () => {
                                         </td>
                                         <td>    
                                             <input className="ml-2" type="checkbox" onClick={(event) => handleCheckbox(event, password._id)}/> Show Password
+                                        </td>
+                                        <td>
+                                          <EditPasswordModal key={password._id} password={password}/>
                                         </td>
                                     </tr>
                                 ))}
