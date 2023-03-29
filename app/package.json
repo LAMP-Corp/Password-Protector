@@ -6,6 +6,7 @@
     "bootstrap": "^5.2.3",
     "classnames": "^2.3.2",
     "core-js": "^3.27.2",
+    "crypto-js": "^3.1.9-1",
     "graphql": "^16.6.0",
     "lodash": "^4.17.21",
     "meteor-node-stubs": "^1.2.5",
