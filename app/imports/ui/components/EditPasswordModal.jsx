@@ -9,7 +9,20 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Passwords } from "../../api/password/PasswordCollection";
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
+import CryptoJS from 'crypto-js';
+
+const decrypt = (password) => {
+
+  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  var iv  = CryptoJS.enc.Utf8.parse(password.owner);
+
+  //Decode from text
+  var cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: CryptoJS.enc.Base64.parse(password.password )
+  });
+  var decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv});
+  return decryptedFromText.toString(CryptoJS.enc.Utf8);
+}
 
 const EditPasswordModal = ({ password }) => {
   const _id = password._id;
@@ -50,7 +63,7 @@ const EditPasswordModal = ({ password }) => {
             <Card>
               <Card.Body>
                 <TextField name="website" />
-                <TextField name="password" />
+                <TextField name="password" value={decrypt(password)}/>
                 <SubmitField value="Update" />
                 <ErrorsField />
                 <HiddenField name="owner" />
