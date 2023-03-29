@@ -13,4 +13,5 @@ export const PAGE_IDS = {
   SIGN_UP: 'sign-up',
   ADD_PASSWORD: 'add-password',
   EDIT_PASSWORD_MODAL: 'edit-password-modal',
+  DELETE_PASSWORD_MODAL: 'delete-password-modal',
 };

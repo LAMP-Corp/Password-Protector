@@ -7,15 +7,8 @@ import { Google, Apple, Meta, Whatsapp, Instagram, Youtube, Android, Facebook, J
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Link } from "react-router-dom";
 import { Passwords } from "../../api/password/PasswordCollection";
-import { AutoForm, ErrorsField, HiddenField, NumField, SelectField, SubmitField, TextField } from 'uniforms-bootstrap5';
-import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { useParams } from 'react-router';
-import { Stuffs } from '../../api/stuff/StuffCollection';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
 import EditPasswordModal from '../components/EditPasswordModal';
 import DeletePasswordModal from '../components/DeletePasswordModal';
-import swal from 'sweetalert';
-
 
 // Retrieve all passwords
 // const passwords = Passwords.find().fetch();

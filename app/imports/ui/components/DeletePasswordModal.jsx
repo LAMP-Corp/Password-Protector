@@ -9,9 +9,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Passwords } from "../../api/password/PasswordCollection";
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router';
 
-const EditPasswordModal = ({ password }) => {
+const DeletePasswordModal = ({ password }) => {
   const _id = password._id;
   const {passwords, ready} = useTracker(() => {
     const subscription = Passwords.subscribePassword();
@@ -27,19 +26,17 @@ const EditPasswordModal = ({ password }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const bridge = new SimpleSchema2Bridge(Passwords._schema);
-  const submit = (data) => {
+  const submit = () => {
     const collectionName = Passwords.getCollectionName();
-    console.log("hello");
     console.log(_id);
-    const password = Passwords.findDoc(_id);
     console.log(password);
-    removeItMethod.callPromise({ collectionName, password })
+    removeItMethod.callPromise({ collectionName, _id })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
   };
 
   return ready ? (
-    <Container id={PAGE_IDS.EDIT_PASSWORD_MODAL} className="py-3">
+    <Container id={PAGE_IDS.DELETE_PASSWORD_MODAL} className="py-3">
       <Button variant="primary" onClick={handleShow}>
         Delete
       </Button>
@@ -65,12 +62,13 @@ const EditPasswordModal = ({ password }) => {
   ) : <LoadingSpinner />;
 };
 
-EditPasswordModal.propTypes = {
+DeletePasswordModal.propTypes = {
   password: PropTypes.shape({
     website: PropTypes.string,
     password: PropTypes.string,
+    owner: PropTypes.string,
     _id: PropTypes.string
   }).isRequired
 };
 
-export default EditPasswordModal;
+export default DeletePasswordModal;
