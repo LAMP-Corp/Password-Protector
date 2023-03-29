@@ -50,3 +50,40 @@ Password-Protector #1
 
 devgav
 Create Home Page
+
+## Progress as of March 28, 2023
+- Tasks completed since the last time README was updated
+    - Created logged-in landing page
+    - Created add passwords page
+    - Created manage passwords page
+    - Created edit passwords modal
+
+## Links
+- Online repository: https://github.com/LAMP-Corp/Password-Protector
+
+## Pending
+- Front end
+    - Update navbar
+    - Consolidate/remove excess pages
+    - Improve presentation
+- Back end
+    - Add delete entry functionality
+    - Encrypt passwords in database
+
+## Roles and Responsibilities
+- William Liang
+    - New completions: Navbar, Password Manage Page
+    - Current: Navbar
+    - Next: Dynamic Analysis
+- Kobey Arai
+    - New completions: Encrypting Passwords
+    - Current: Encrypting Passwords
+    - Next: Static Analysis
+- Yong-Sung Masuda
+    - New completions: Edit Password Modal
+    - Current: Delete Password Modal
+    - Next: Fuzz testing
+- Gavin Peng
+    - New completions: Home Page, Login Page, Add Password Page
+    - Current: Presentation
+    - Next: Dynamic Analysis
