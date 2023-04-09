@@ -27,7 +27,7 @@ class PasswordCollection extends BaseCollection {
    * @return {String} the docID of the new document.
    */
   define({ website, password, owner }) {
-    console.log("Password inputted successfully with data: ", website, password, owner);
+    console.log('Password inputted successfully with data: ', website, password, owner);
     const docID = this._collection.insert({
       password,
       website,
@@ -143,10 +143,11 @@ Meteor.methods({
     check(password, String);
 
     // Make sure the user is logged in before inserting a password
-    if (! this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
+    // eslint-disable-next-line no-use-before-define
     Passwords.insert({
       website,
       password,
@@ -158,15 +159,17 @@ Meteor.methods({
     check(passwordId, String);
 
     // Make sure the user is logged in before removing a password
-    if (! this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    const password = Passwords.findOne({_id: passwordId, owner: Meteor.user().username});
+    // eslint-disable-next-line no-use-before-define
+    const password = Passwords.findOne({ _id: passwordId, owner: Meteor.user().username });
     if (!password) {
       throw new Meteor.Error('password-not-found', 'The password could not be found');
     }
 
+    // eslint-disable-next-line no-use-before-define
     Passwords.remove(passwordId);
   },
   'passwords.update'(passwordId, updatedPassword) {
@@ -174,16 +177,18 @@ Meteor.methods({
     check(updatedPassword, String);
 
     // Make sure the user is logged in before updating a password
-    if (! this.userId) {
+    if (!this.userId) {
       throw new Meteor.Error('not-authorized');
     }
 
-    const password = Passwords.findOne({_id: passwordId, owner: Meteor.user().username});
+    // eslint-disable-next-line no-use-before-define
+    const password = Passwords.findOne({ _id: passwordId, owner: Meteor.user().username });
     if (!password) {
       throw new Meteor.Error('password-not-found', 'The password could not be found');
     }
 
-    Passwords.update(passwordId, {$set: {password: updatedPassword}});
+    // eslint-disable-next-line no-use-before-define
+    Passwords.update(passwordId, { $set: { password: updatedPassword } });
   },
 });
 

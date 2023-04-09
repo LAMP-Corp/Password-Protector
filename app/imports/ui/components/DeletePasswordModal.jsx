@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import swal from 'sweetalert';
-import { Card, Col, Container, Row, Modal, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, HiddenField, NumField, SelectField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { Card, Container, Modal, Button } from 'react-bootstrap';
+import { AutoForm, ErrorsField, HiddenField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { removeItMethod } from '../../api/base/BaseCollection.methods';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { PAGE_IDS } from '../utilities/PageIDs';
-import { Passwords } from "../../api/password/PasswordCollection";
 import PropTypes from 'prop-types';
+import { removeItMethod } from '../../api/base/BaseCollection.methods';
+import LoadingSpinner from './LoadingSpinner';
+import { PAGE_IDS } from '../utilities/PageIDs';
+import { Passwords } from '../../api/password/PasswordCollection';
 
 const DeletePasswordModal = ({ password }) => {
   const _id = password._id;
-  const {passwords, ready} = useTracker(() => {
+  // eslint-disable-next-line no-unused-vars
+  const { passwords, ready } = useTracker(() => {
     const subscription = Passwords.subscribePassword();
     const passwordItems = Passwords.find({}, { sort: { password: 1, website: 1, owner: 1 } }).fetch();
     const rdy = subscription.ready();
     return {
       passwords: passwordItems,
-      ready: rdy
+      ready: rdy,
     };
   }, []);
 
@@ -67,8 +68,8 @@ DeletePasswordModal.propTypes = {
     website: PropTypes.string,
     password: PropTypes.string,
     owner: PropTypes.string,
-    _id: PropTypes.string
-  }).isRequired
+    _id: PropTypes.string,
+  }).isRequired,
 };
 
 export default DeletePasswordModal;

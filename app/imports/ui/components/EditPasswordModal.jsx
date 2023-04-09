@@ -1,49 +1,51 @@
 import React, { useState } from 'react';
+import { Meteor } from 'meteor/meteor';
 import swal from 'sweetalert';
-import { Card, Col, Container, Row, Modal, Button } from 'react-bootstrap';
-import { AutoForm, ErrorsField, HiddenField, NumField, SelectField, SubmitField, TextField } from 'uniforms-bootstrap5';
+import { Card, Container, Modal, Button } from 'react-bootstrap';
+import { AutoForm, ErrorsField, HiddenField, SubmitField, TextField } from 'uniforms-bootstrap5';
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
-import { updateMethod } from '../../api/base/BaseCollection.methods';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { PAGE_IDS } from '../utilities/PageIDs';
-import { Passwords } from "../../api/password/PasswordCollection";
 import PropTypes from 'prop-types';
 import CryptoJS from 'crypto-js';
+import { updateMethod } from '../../api/base/BaseCollection.methods';
+import LoadingSpinner from './LoadingSpinner';
+import { PAGE_IDS } from '../utilities/PageIDs';
+import { Passwords } from '../../api/password/PasswordCollection';
 
 const decrypt = (password) => {
 
-  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
-  var iv  = CryptoJS.enc.Utf8.parse(password.owner);
+  const key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  const iv = CryptoJS.enc.Utf8.parse(password.owner);
 
-  //Decode from text
-  var cipherParams = CryptoJS.lib.CipherParams.create({
-    ciphertext: CryptoJS.enc.Base64.parse(password.password )
+  // Decode from text
+  const cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: CryptoJS.enc.Base64.parse(password.password),
   });
-  var decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv});
+  const decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv });
   return decryptedFromText.toString(CryptoJS.enc.Utf8);
-}
+};
 
 const encrypt = (unencryptedPassword) => {
   const owner = Meteor.user().username;
 
-  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
-  var iv  = CryptoJS.enc.Utf8.parse(owner);
+  const key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  const iv = CryptoJS.enc.Utf8.parse(owner);
 
-  var encryptedCP = CryptoJS.AES.encrypt(unencryptedPassword, key, { iv: iv });
-  var password = encryptedCP.toString();
+  const encryptedCP = CryptoJS.AES.encrypt(unencryptedPassword, key, { iv: iv });
+  const password = encryptedCP.toString();
   return password;
-}
+};
 
 const EditPasswordModal = ({ password }) => {
   const _id = password._id;
-  const {passwords, ready} = useTracker(() => {
+  // eslint-disable-next-line no-unused-vars
+  const { passwords, ready } = useTracker(() => {
     const subscription = Passwords.subscribePassword();
     const passwordItems = Passwords.find({}, { sort: { password: 1, website: 1, owner: 1 } }).fetch();
     const rdy = subscription.ready();
     return {
       passwords: passwordItems,
-      ready: rdy
+      ready: rdy,
     };
   }, []);
 
@@ -53,6 +55,7 @@ const EditPasswordModal = ({ password }) => {
   const bridge = new SimpleSchema2Bridge(Passwords._schema);
 
   const submit = (data) => {
+    // eslint-disable-next-line no-shadow,prefer-const
     let { website, password } = data;
     password = encrypt(password);
     const collectionName = Passwords.getCollectionName();
@@ -72,6 +75,7 @@ const EditPasswordModal = ({ password }) => {
           <Modal.Title>Edit Entry</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {/* eslint-disable-next-line react/prop-types */}
           <AutoForm schema={bridge} onSubmit={data => submit(data)} model={{ website: password.website, password: decrypt(password), owner: password.owner }}>
             <Card>
               <Card.Body>
@@ -93,8 +97,8 @@ EditPasswordModal.propTypes = {
   password: PropTypes.shape({
     website: PropTypes.string,
     password: PropTypes.string,
-    _id: PropTypes.string
-  }).isRequired
+    _id: PropTypes.string,
+  }).isRequired,
 };
 
 export default EditPasswordModal;

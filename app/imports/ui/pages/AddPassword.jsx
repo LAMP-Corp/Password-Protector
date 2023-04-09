@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
-import { AutoField, AutoForm, ErrorsField, SubmitField } from "uniforms-bootstrap5";
+import { AutoField, AutoForm, ErrorsField, SubmitField } from 'uniforms-bootstrap5';
 import swal from 'sweetalert';
 import { Meteor } from 'meteor/meteor';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import SimpleSchema from 'simpl-schema';
-import { Passwords } from "../../api/password/PasswordCollection";
+import { Passwords } from '../../api/password/PasswordCollection';
 import { defineMethod } from '../../api/base/BaseCollection.methods';
 import { PAGE_IDS } from '../utilities/PageIDs';
 
@@ -21,19 +21,18 @@ const bridge = new SimpleSchema2Bridge(formSchema);
 
 /* Renders the AddPassword page for adding a document. */
 const AddPassword = () => {
-  const [password, setPassword] = useState("password");
+  const [password, setPassword] = useState('password');
   // On submit, insert the data.
   const submit = (data, formRef) => {
     const { website, password2 } = data;
     const owner = Meteor.user().username;
 
+    const key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+    const iv = CryptoJS.enc.Utf8.parse(owner);
 
-    var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
-    var iv  = CryptoJS.enc.Utf8.parse(owner);
-
-    var encryptedCP = CryptoJS.AES.encrypt(password2, key, { iv: iv });
-    var password = encryptedCP.toString();
-
+    const encryptedCP = CryptoJS.AES.encrypt(password2, key, { iv: iv });
+    // eslint-disable-next-line no-shadow
+    const password = encryptedCP.toString();
 
     const collectionName = Passwords.getCollectionName();
     const definitionData = { website, password, owner };
@@ -48,11 +47,11 @@ const AddPassword = () => {
   const handleCheckbox = (event) => {
     const clicked = event.target.checked;
     if (!clicked) {
-      setPassword("password")
+      setPassword('password');
     } else {
-      setPassword("")
+      setPassword('');
     }
-  }
+  };
 
   // Render the form. Use Uniforms: https://github.com/vazco/uniforms
   let fRef = null;
@@ -64,9 +63,9 @@ const AddPassword = () => {
           <AutoForm ref={ref => { fRef = ref; }} schema={bridge} onSubmit={data => submit(data, fRef)}>
             <Card>
               <Card.Body>
-                <AutoField name="website"/>
-                <AutoField name="password2" type={password}/>
-                <input className="mb-3" type="checkbox" onClick={handleCheckbox}/> Show Password
+                <AutoField name="website" />
+                <AutoField name="password2" type={password} />
+                <input className="mb-3" type="checkbox" onClick={handleCheckbox} /> Show Password
                 <SubmitField value="Submit" />
                 <ErrorsField />
               </Card.Body>
