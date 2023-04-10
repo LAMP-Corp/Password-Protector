@@ -1,13 +1,13 @@
 ## Team members
 - William Liang
   - what they will be handling next: Navbar
-  - what they worked on: Navbar
+  - what they worked on: Navbar, ESLint Errors
 - Kobey Arai
   - what they will be handling next: Hashing Password
   - what they worked on: Hashing Password
 - Young-Sung Masuda
   - what they will be handling next: Create Password Manage Page
-  - what they worked on: Create Password Manage Page
+  - what they worked on: Create Password Manage Page, Delete Password feature
 - Gavin Peng
   - what they will be handling next: Create Login Page
   - what they worked on: Home Page
