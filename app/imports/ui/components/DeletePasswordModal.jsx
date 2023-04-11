@@ -9,6 +9,20 @@ import { removeItMethod } from '../../api/base/BaseCollection.methods';
 import LoadingSpinner from './LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Passwords } from '../../api/password/PasswordCollection';
+import CryptoJS from 'crypto-js';
+
+const decrypt = (password) => {
+
+  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  var iv  = CryptoJS.enc.Utf8.parse(password.owner);
+
+  //Decode from text
+  var cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: CryptoJS.enc.Base64.parse(password.password )
+  });
+  var decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv});
+  return decryptedFromText.toString(CryptoJS.enc.Utf8);
+}
 
 const DeletePasswordModal = ({ password }) => {
   const _id = password._id;
@@ -29,9 +43,7 @@ const DeletePasswordModal = ({ password }) => {
   const bridge = new SimpleSchema2Bridge(Passwords._schema);
   const submit = () => {
     const collectionName = Passwords.getCollectionName();
-    console.log(_id);
-    console.log(password);
-    removeItMethod.callPromise({ collectionName, _id })
+    removeItMethod.callPromise({ collectionName, instance: _id })
       .catch(error => swal('Error', error.message, 'error'))
       .then(() => swal('Success', 'Item updated successfully', 'success'));
   };
@@ -46,14 +58,22 @@ const DeletePasswordModal = ({ password }) => {
           <Modal.Title>Delete Entry</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AutoForm schema={bridge} onSubmit={data => submit(data)} model={Passwords.findDoc(password._id)}>
+          <AutoForm schema={bridge} onSubmit={data => submit(data)}>
             <Card>
               <Card.Body>
-                <TextField name="website" />
-                <TextField name="password" />
-                <SubmitField value="Delete" />
+                <FormLabel>
+                  Are you sure you would like to delete this entry?
+                </FormLabel>
+                <TextField name="website" value={password.website}/>
+                <TextField name="password" value={decrypt(password)}/>
+                <div style={{ display: 'flex', justifyContent: 'space-between'  }}>
+                  <SubmitField value="Delete" />
+                  <Button onClick={() => handleClose()}>
+                    Cancel
+                  </Button>
+                </div>
                 <ErrorsField />
-                <HiddenField name="owner" />
+                <HiddenField name="owner" value={password.owner}/>
               </Card.Body>
             </Card>
           </AutoForm>
