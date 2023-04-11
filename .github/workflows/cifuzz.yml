@@ -28,8 +28,6 @@ jobs:
         with:
           node-version: '16.x'
 
-      - run: npm ci
-
       - run: curl https://install.meteor.com/ | sh
 
       - name: Run Meteor commands
