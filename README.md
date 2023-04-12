@@ -3,7 +3,7 @@
   - what they will be handling next: Navbar
   - what they worked on: Navbar, ESLint Errors
 - Kobey Arai
-  - what they will be handling next: Hashing Password
+  - what they will be handling next: Fixing the password hash from using a public key to a private key. 
   - what they worked on: Hashing Password
 - Young-Sung Masuda
   - what they will be handling next: Create Password Manage Page
@@ -15,9 +15,7 @@
 
 ## What is pending
 
-Password-Protector #2
-
-Create password manage page
+This item hasn't been started
 
 Password-Protector #6
 
@@ -27,22 +25,22 @@ Password-Protector #7
 
 Create signed-in (landing page)
 
-Password-Protector #8
-
-Create Input Password page
-
 
 ## In progress
 
+This is actively being worked on
+
 Password-Protector #4
 
+Assignees: William-Liang808
 William-Liang808
 Create navbar
 
-Password-Protector #5
+Password-Protector #11
 
-Kobeyarai808
-Create hashing for passwords
+Assignees: yongsungm
+yongsungm
+Create delete password modal
 
 ## What is completed so far
 
