@@ -5,24 +5,24 @@ import { AutoForm, ErrorsField, HiddenField, SubmitField, TextField } from 'unif
 import { useTracker } from 'meteor/react-meteor-data';
 import SimpleSchema2Bridge from 'uniforms-bridge-simple-schema-2';
 import PropTypes from 'prop-types';
+import CryptoJS from 'crypto-js';
 import { removeItMethod } from '../../api/base/BaseCollection.methods';
 import LoadingSpinner from './LoadingSpinner';
 import { PAGE_IDS } from '../utilities/PageIDs';
 import { Passwords } from '../../api/password/PasswordCollection';
-import CryptoJS from 'crypto-js';
 
 const decrypt = (password) => {
 
-  var key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
-  var iv  = CryptoJS.enc.Utf8.parse(password.owner);
+  const key = CryptoJS.enc.Utf8.parse('b75524255a7f54d2726a951bb39204df');
+  const iv = CryptoJS.enc.Utf8.parse(password.owner);
 
-  //Decode from text
-  var cipherParams = CryptoJS.lib.CipherParams.create({
-    ciphertext: CryptoJS.enc.Base64.parse(password.password )
+  // Decode from text
+  const cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: CryptoJS.enc.Base64.parse(password.password),
   });
-  var decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv});
+  const decryptedFromText = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv });
   return decryptedFromText.toString(CryptoJS.enc.Utf8);
-}
+};
 
 const DeletePasswordModal = ({ password }) => {
   const _id = password._id;
@@ -66,7 +66,7 @@ const DeletePasswordModal = ({ password }) => {
                 </FormLabel>
                 <TextField name="website" value={password.website}/>
                 <TextField name="password" value={decrypt(password)}/>
-                <div style={{ display: 'flex', justifyContent: 'space-between'  }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <SubmitField value="Delete" />
                   <Button onClick={() => handleClose()}>
                     Cancel
