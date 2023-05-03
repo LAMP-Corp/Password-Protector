@@ -32,8 +32,8 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
-          <Route path="/home" element={<ProtectedRoute><Landing /></ProtectedRoute>} />
-          <Route path="/add" element={<ProtectedRoute><AddPassword /></ProtectedRoute>} />
+          <Route path="/home" element={<ProtectedRoute><Landing ready={ready}/></ProtectedRoute>} />
+          <Route path="/add" element={<ProtectedRoute><AddPassword ready={ready}/></ProtectedRoute>} />
           <Route path="/notauthorized" element={<NotAuthorized />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
